@@ -1,31 +1,30 @@
-interface ErrorStateProps {
-  title?: string;
+type ErrorStateProps = {
   message?: string;
-  onRetry?: () => void;
-}
+};
 
 export default function ErrorState({
-  title = "Something went wrong",
-  message = "We could not load the workouts.",
-  onRetry,
+  message = "Unable to load workouts.",
 }: ErrorStateProps) {
   return (
-    <div className="flex min-h-60 flex-col items-center justify-center px-6 text-center">
-      <h2 className="text-xl font-bold">{title}</h2>
+    <div
+      className="rounded-xl border border-red-200 bg-red-50 p-8 text-center"
+      role="alert"
+    >
+      <h3 className="text-lg font-black text-red-700">
+        SOMETHING WENT WRONG
+      </h3>
 
-      <p className="mt-2 max-w-md text-sm text-gray-600">
+      <p className="mt-2 text-sm text-red-600">
         {message}
       </p>
 
-      {onRetry && (
-        <button
-          type="button"
-          onClick={onRetry}
-          className="mt-5 rounded-md bg-black px-4 py-2 text-sm font-semibold text-white hover:bg-gray-800"
-        >
-          Try Again
-        </button>
-      )}
+      <button
+        type="button"
+        onClick={() => window.location.reload()}
+        className="mt-5 rounded-md bg-black px-5 py-2.5 text-sm font-bold text-white transition hover:bg-gray-800"
+      >
+        TRY AGAIN
+      </button>
     </div>
   );
 }

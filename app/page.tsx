@@ -1,13 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import WorkoutLibrary from "@/components/WorkoutLibrary";
+
 export default function Home() {
   return (
     <main>
-      {/* Hero Section */}
+      {/* Hero */}
       <section className="border-b border-black bg-white">
         <div className="mx-auto grid max-w-7xl items-center gap-10 px-6 py-16 sm:px-8 sm:py-20 lg:grid-cols-2 lg:gap-16 lg:px-10 lg:py-24">
-          {/* Hero Content */}
           <div>
             <p className="mb-5 text-sm font-bold tracking-[0.2em] text-gray-600">
               WORKOUT LIBRARY
@@ -30,13 +31,13 @@ export default function Home() {
               className="mt-8 inline-flex items-center rounded-md bg-black px-6 py-3 text-sm font-bold text-white transition-transform hover:-translate-y-0.5 hover:bg-gray-800"
             >
               BROWSE WORKOUTS
+
               <span className="ml-3 text-lg" aria-hidden="true">
                 →
               </span>
             </Link>
           </div>
 
-          {/* Hero Image */}
           <div className="relative mx-auto w-full max-w-xl">
             <div className="overflow-hidden rounded-2xl bg-gray-100">
               <Image
@@ -52,7 +53,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Workout Library Anchor */}
+      {/* Workout Library */}
       <section
         id="library"
         className="mx-auto max-w-7xl px-6 py-16 sm:px-8 lg:px-10"
@@ -68,6 +69,10 @@ export default function Home() {
         <p className="mt-3 text-gray-600">
           Your workouts will appear here in the next step.
         </p>
+
+        <div className="mt-10">
+          <WorkoutLibrary />
+        </div>
       </section>
     </main>
   );
