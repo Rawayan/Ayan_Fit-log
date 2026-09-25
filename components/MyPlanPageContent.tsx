@@ -31,6 +31,16 @@ export default function MyPlanPageContent() {
     setMounted(true);
   }, []);
 
+  // Sync active tab with URL query param
+  useEffect(() => {
+    const urlTab = searchParams.get("tab");
+    if (urlTab === "saved" && activeTab !== "saved") {
+      setActiveTab("saved");
+    } else if (urlTab !== "saved" && activeTab !== "today") {
+      setActiveTab("today");
+    }
+  }, [searchParams, activeTab]);
+
   const {
     plan,
     saved,
