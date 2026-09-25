@@ -40,7 +40,9 @@ export async function getWorkout(
   return normalizeWorkout(data);
 }
 
-function normalizeWorkoutList(data: unknown): Workout[] {
+function normalizeWorkoutList(
+  data: unknown
+): Workout[] {
   if (Array.isArray(data)) {
     return data.map(normalizeWorkout);
   }
@@ -57,42 +59,98 @@ function normalizeWorkoutList(data: unknown): Workout[] {
     }
   }
 
-  throw new Error("Invalid workout list response.");
+  throw new Error(
+    "Invalid workout list response."
+  );
 }
 
-function normalizeWorkout(data: unknown): Workout {
+function normalizeWorkout(
+  data: unknown
+): Workout {
   if (
     typeof data !== "object" ||
     data === null
   ) {
-    throw new Error("Invalid workout response.");
+    throw new Error(
+      "Invalid workout response."
+    );
   }
 
   const item = data as Record<string, unknown>;
 
   return {
     id: String(item.id ?? ""),
+    
     name: String(
-      item.name ?? item.title ?? "Untitled Workout"
+      item.name ??
+        item.title ??
+        "Untitled Workout"
     ),
-    description: String(item.description ?? ""),
+
+    description: String(
+      item.description ?? ""
+    ),
+
     image: String(
-      item.image ?? item.imageUrl ?? item.thumbnail ?? ""
+      item.image ??
+        item.imageUrl ??
+        item.thumbnail ??
+        ""
     ),
+
     category:
       typeof item.category === "string"
         ? item.category
         : Array.isArray(item.category)
           ? item.category.map(String)
           : "",
-    equipment: String(item.equipment ?? ""),
-    difficulty: String(item.difficulty ?? ""),
-    sets: Number(item.sets ?? 0),
-    reps: Number(item.reps ?? 0),
-    duration: Number(item.duration ?? 0),
-    calories: Number(item.calories ?? 0),
-    rating: Number(item.rating ?? 0),
-    instructions: Array.isArray(item.instructions)
+
+    equipment: String(
+      item.equipment ?? ""
+    ),
+
+    difficulty: String(
+      item.difficulty ?? ""
+    ),
+
+    sets: Number(
+      item.sets ??
+        item.set ??
+        0
+    ),
+
+    reps: Number(
+      item.reps ??
+        item.rep ??
+        0
+    ),
+
+    duration: Number(
+      item.duration ??
+        item.durationMinutes ??
+        item.minutes ??
+        0
+    ),
+
+    calories: Number(
+      item.calories ??
+        item.calorie ??
+        item.caloriesBurned ??
+        item.calories_burned ??
+        item.caloriesBurn ??
+        item.burnCalories ??
+        0
+    ),
+
+    rating: Number(
+      item.rating ??
+        item.rate ??
+        0
+    ),
+
+    instructions: Array.isArray(
+      item.instructions
+    )
       ? item.instructions.map(String)
       : [],
   };

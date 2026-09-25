@@ -5,14 +5,18 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { useFitLog } from "@/context/FitLogContext";
-import EmptyState from "@/components/ui/EmptyState";
+import Toast from "@/components/ui/Toast";
 
 import type { Workout } from "@/types/workout";
 
 type Tab = "today" | "saved";
 
 export default function MyPlanPage() {
-  const [activeTab, setActiveTab] = useState<Tab>("today");
+  const [activeTab, setActiveTab] =
+    useState<Tab>("today");
+
+  const [toast, setToast] =
+    useState("");
 
   const {
     plan,
@@ -24,283 +28,278 @@ export default function MyPlanPage() {
   } = useFitLog();
 
   const activeWorkouts =
-    activeTab === "today" ? plan : saved;
+    activeTab === "today"
+      ? plan
+      : saved;
 
   const totalMinutes = plan.reduce(
-    (total, workout) => total + workout.duration,
+    (total, workout) =>
+      total + workout.duration,
     0
   );
 
   const totalCalories = plan.reduce(
-    (total, workout) => total + workout.calories,
+    (total, workout) =>
+      total + workout.calories,
     0
   );
 
-  function handleRemove(id: string | number) {
+  function showToast(message: string) {
+    setToast(message);
+
+    window.setTimeout(
+      () => setToast(""),
+      3000
+    );
+  }
+
+  function handleRemove(
+    id: string | number,
+    name: string
+  ) {
     if (activeTab === "today") {
       removeFromPlan(id);
+      showToast(`${name} removed from today's plan.`);
     } else {
       removeSaved(id);
+      showToast(`${name} removed from saved workouts.`);
     }
   }
 
+  function handleDone(
+    id: string | number,
+    name: string
+  ) {
+    const completed = isCompleted(id);
+
+    markDone(id);
+
+    showToast(
+      completed
+        ? `${name} marked as not completed.`
+        : `${name} marked as completed.`
+    );
+  }
+
   return (
-    <main className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <section className="border-b border-black bg-white">
-        <div className="mx-auto max-w-7xl px-6 py-12 sm:px-8 lg:px-10">
-          <p className="text-sm font-bold tracking-[0.2em] text-gray-500">
-            FITLOG
-          </p>
+    <main className="min-h-[630px] bg-[#0c0d10]">
+      <section className="mx-auto max-w-[1280px] px-6 py-10">
+        <h1 className="font-heading text-3xl font-bold uppercase">
+          MY PLAN
+        </h1>
 
-          <h1 className="mt-2 text-4xl font-black tracking-tight sm:text-5xl">
-            MY PLAN
-          </h1>
+        <p className="mt-2 text-sm text-[#8d929d]">
+          Cap of five lifts for today. Finish them,
+          then load more.
+        </p>
 
-          <p className="mt-4 max-w-2xl text-gray-600">
-            Cap of five lifts for today. Finish them, then load more.
-          </p>
-        </div>
-      </section>
-
-      {/* Metrics */}
-      <section className="mx-auto max-w-7xl px-6 py-8 sm:px-8 lg:px-10">
-        <div className="grid gap-4 sm:grid-cols-3">
-          <MetricCard
+        {/* Metrics */}
+        <div className="mt-8 grid grid-cols-3 gap-0">
+          <Metric
             label="Exercises"
             value={plan.length}
           />
 
-          <MetricCard
+          <Metric
             label="Minutes"
             value={totalMinutes}
           />
 
-          <MetricCard
+          <Metric
             label="Calories"
             value={totalCalories}
           />
         </div>
-      </section>
 
-      {/* Tabs */}
-      <section className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10">
-        <div className="flex border-b border-gray-200">
-          <button
-            type="button"
-            onClick={() => setActiveTab("today")}
-            className={`border-b-2 px-5 py-3 text-sm font-bold transition ${
-              activeTab === "today"
-                ? "border-black text-black"
-                : "border-transparent text-gray-500 hover:text-black"
-            }`}
-          >
-            TODAY&apos;S PLAN
+        {/* Tabs */}
+        <div className="mt-8 flex items-center justify-between border-b border-[#292d35]">
+          <div className="flex">
+            <button
+              type="button"
+              onClick={() =>
+                setActiveTab("today")
+              }
+              className={`px-5 py-3 text-sm ${
+                activeTab === "today"
+                  ? "border-b-2 border-[#c2f800] text-white"
+                  : "text-[#777c85]"
+              }`}
+            >
+              Today&apos;s Plan
+            </button>
 
-            <span className="ml-2 rounded-full bg-gray-100 px-2 py-0.5 text-xs">
-              {plan.length}
-            </span>
-          </button>
+            <button
+              type="button"
+              onClick={() =>
+                setActiveTab("saved")
+              }
+              className={`px-5 py-3 text-sm ${
+                activeTab === "saved"
+                  ? "border-b-2 border-[#c2f800] text-white"
+                  : "text-[#777c85]"
+              }`}
+            >
+              Saved
+            </button>
+          </div>
+        </div>
 
-          <button
-            type="button"
-            onClick={() => setActiveTab("saved")}
-            className={`border-b-2 px-5 py-3 text-sm font-bold transition ${
-              activeTab === "saved"
-                ? "border-black text-black"
-                : "border-transparent text-gray-500 hover:text-black"
-            }`}
-          >
-            SAVED
+        {/* Cards */}
+        <div className="mt-6">
+          {activeWorkouts.length === 0 ? (
+            <div className="flex h-[300px] flex-col items-center justify-center border border-[#292d35] bg-[#15171d] text-center">
+              <h2 className="font-heading text-xl font-bold uppercase">
+                NOTHING HERE YET
+              </h2>
 
-            <span className="ml-2 rounded-full bg-gray-100 px-2 py-0.5 text-xs">
-              {saved.length}
-            </span>
-          </button>
+              <p className="mt-2 text-sm text-[#8d929d]">
+                Browse the library and add a lift to get today moving.
+              </p>
+
+              <Link
+                href="/"
+                className="mt-5 bg-[#c2f800] px-6 py-2.5 text-xs font-bold uppercase text-[#0c0d10]"
+              >
+                Go to workouts
+              </Link>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {activeWorkouts.map(
+                (workout) => {
+                  const completed =
+                    isCompleted(
+                      workout.id
+                    );
+
+                  return (
+                    <article
+                      key={workout.id}
+                      className={`flex min-h-[114px] items-center justify-between border bg-[#14171e] px-4 py-4 ${
+                        completed
+                          ? "border-[#3e5412]"
+                          : "border-[#292d35]"
+                      }`}
+                    >
+                      <div className="flex items-center gap-5">
+                        <div className="relative h-20 w-36 shrink-0 overflow-hidden bg-[#1f232b]">
+                          {workout.image && (
+                            <Image
+                              src={workout.image}
+                              alt={workout.name}
+                              fill
+                              sizes="144px"
+                              className="object-cover"
+                            />
+                          )}
+                        </div>
+
+                        <div>
+                          <h2
+                            className={`font-heading text-2xl font-bold uppercase ${
+                              completed
+                                ? "text-[#6f747d] line-through"
+                                : "text-white"
+                            }`}
+                          >
+                            {workout.name}
+                          </h2>
+
+                          <p className="mt-1 text-sm text-[#777c85]">
+                            {workout.equipment}
+                          </p>
+
+                          <div className="mt-2 flex gap-4 text-xs text-[#a0a5ae]">
+                            <span>
+                              {workout.duration} min
+                            </span>
+
+                            <span>
+                              {workout.calories} kcal
+                            </span>
+
+                            <span>
+                              ★ {workout.rating}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <Link
+                          href={`/workout/${workout.id}`}
+                          className="border border-[#3a3f48] px-4 py-2 text-xs text-white hover:border-[#c2f800]"
+                        >
+                          View Details
+                        </Link>
+
+                        {activeTab === "today" && (
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleDone(
+                                workout.id,
+                                workout.name
+                              )
+                            }
+                            className="border border-[#3a3f48] px-4 py-2 text-xs text-white hover:border-[#c2f800]"
+                          >
+                            {completed
+                              ? "DONE"
+                              : "MARK DONE"}
+                          </button>
+                        )}
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleRemove(
+                              workout.id,
+                              workout.name
+                            )
+                          }
+                          className="flex h-8 w-8 items-center justify-center border border-[#3a3f48] text-[#8d929d] hover:border-red-500 hover:text-red-400"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    </article>
+                  );
+                }
+              )}
+            </div>
+          )}
         </div>
       </section>
 
-      {/* Workout List */}
-      <section className="mx-auto max-w-7xl px-6 py-8 sm:px-8 lg:px-10">
-        {activeWorkouts.length === 0 ? (
-          <EmptyState
-            title="NOTHING HERE YET"
-            description="Browse the library and add a lift to get today moving."
-            action={
-              <Link
-                href="/"
-                className="inline-flex rounded-md bg-black px-6 py-3 text-sm font-bold text-white transition hover:bg-gray-800"
-              >
-                GO TO WORKOUTS
-              </Link>
-            }
-          />
-        ) : (
-          <div className="space-y-4">
-            {activeWorkouts.map((workout) => (
-              <WorkoutPlanCard
-                key={workout.id}
-                workout={workout}
-                activeTab={activeTab}
-                onRemove={handleRemove}
-                onMarkDone={markDone}
-                isCompleted={isCompleted(workout.id)}
-              />
-            ))}
-          </div>
-        )}
-      </section>
+      {toast && (
+        <Toast
+          message={toast}
+          onClose={() =>
+            setToast("")
+          }
+        />
+      )}
     </main>
   );
 }
 
-/* =========================
-   Metric Card
-========================= */
-
-type MetricCardProps = {
-  label: string;
-  value: number;
-};
-
-function MetricCard({
+function Metric({
   label,
   value,
-}: MetricCardProps) {
+}: {
+  label: string;
+  value: number;
+}) {
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-5">
-      <p className="text-xs font-bold uppercase tracking-[0.15em] text-gray-400">
+    <div className="border-r border-[#292d35] py-5 last:border-r-0">
+      <p className="text-xs text-[#777c85]">
         {label}
       </p>
 
-      <p className="mt-2 text-3xl font-black">
+      <p className="font-heading mt-1 text-4xl font-bold">
         {value}
       </p>
     </div>
-  );
-}
-
-/* =========================
-   Workout Plan Card
-========================= */
-
-type WorkoutPlanCardProps = {
-  workout: Workout;
-  activeTab: Tab;
-  onRemove: (id: string | number) => void;
-  onMarkDone: (id: string | number) => void;
-  isCompleted: boolean;
-};
-
-function WorkoutPlanCard({
-  workout,
-  activeTab,
-  onRemove,
-  onMarkDone,
-  isCompleted,
-}: WorkoutPlanCardProps) {
-  return (
-    <article
-      className={`overflow-hidden rounded-xl border bg-white transition ${
-        isCompleted
-          ? "border-green-200 opacity-75"
-          : "border-gray-200"
-      }`}
-    >
-      <div className="flex flex-col sm:flex-row">
-        {/* Image */}
-        <div className="relative h-52 w-full shrink-0 bg-gray-100 sm:h-auto sm:w-56">
-          {workout.image ? (
-            <Image
-              src={workout.image}
-              alt={workout.name}
-              fill
-              sizes="(max-width: 640px) 100vw, 224px"
-              className="object-cover"
-            />
-          ) : (
-            <div className="flex h-full items-center justify-center text-sm font-bold text-gray-400">
-              NO IMAGE
-            </div>
-          )}
-        </div>
-
-        {/* Content */}
-        <div className="flex flex-1 flex-col justify-between p-5">
-          <div>
-            <h2
-              className={`text-xl font-black ${
-                isCompleted
-                  ? "text-gray-500 line-through"
-                  : "text-black"
-              }`}
-            >
-              {workout.name}
-            </h2>
-
-            <p className="mt-1 text-sm text-gray-500">
-              {workout.equipment || "No equipment"}
-            </p>
-
-            {/* Stats */}
-            <div className="mt-4 flex flex-wrap gap-4 text-sm text-gray-700">
-              <span>
-                <strong>{workout.duration}</strong> min
-              </span>
-
-              <span>
-                <strong>{workout.calories}</strong> cal
-              </span>
-
-              <span>
-                <strong>★ {workout.rating}</strong>
-              </span>
-            </div>
-
-            {/* Completed Badge */}
-            {isCompleted && activeTab === "today" && (
-              <span className="mt-4 inline-flex rounded-full bg-green-50 px-3 py-1 text-xs font-bold text-green-700">
-                COMPLETED
-              </span>
-            )}
-          </div>
-
-          {/* Actions */}
-          <div className="mt-6 flex flex-wrap gap-3">
-            {/* View Details */}
-            <Link
-              href={`/workout/${workout.id}`}
-              className="rounded-md bg-black px-4 py-2.5 text-xs font-bold text-white transition hover:bg-gray-800"
-            >
-              VIEW DETAILS
-            </Link>
-
-            {/* Mark Done */}
-            {activeTab === "today" && (
-              <button
-                type="button"
-                onClick={() => onMarkDone(workout.id)}
-                className={`rounded-md border px-4 py-2.5 text-xs font-bold transition ${
-                  isCompleted
-                    ? "border-green-300 bg-green-50 text-green-700 hover:bg-green-100"
-                    : "border-gray-300 text-gray-700 hover:border-black hover:text-black"
-                }`}
-              >
-                {isCompleted ? "DONE" : "MARK DONE"}
-              </button>
-            )}
-
-            {/* Remove */}
-            <button
-              type="button"
-              onClick={() => onRemove(workout.id)}
-              className="rounded-md border border-red-200 px-4 py-2.5 text-xs font-bold text-red-600 transition hover:bg-red-50"
-            >
-              REMOVE
-            </button>
-          </div>
-        </div>
-      </div>
-    </article>
   );
 }

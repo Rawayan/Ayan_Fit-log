@@ -5,72 +5,61 @@ import WorkoutLibrary from "@/components/WorkoutLibrary";
 
 export default function Home() {
   return (
-    <main>
-      {/* Hero */}
-      <section className="border-b border-black bg-white">
-        <div className="mx-auto grid max-w-7xl items-center gap-10 px-5 py-14 sm:px-8 sm:py-20 lg:grid-cols-2 lg:gap-16 lg:px-10 lg:py-24">
-          <div>
-            <p className="mb-4 text-xs font-bold tracking-[0.2em] text-gray-600 sm:mb-5 sm:text-sm">
+    <main className="bg-[#0c0d10]">
+      {/* HERO */}
+      <section className="mx-auto max-w-[1280px] px-6">
+        <div className="grid min-h-[574px] grid-cols-2 items-center gap-20 px-[57px]">
+          {/* Left */}
+          <div className="max-w-[558px]">
+            <p className="mb-5 text-[11px] font-bold uppercase tracking-[0.1em] text-[#c2f800]">
               WORKOUT LIBRARY
             </p>
 
-            <h1 className="max-w-3xl text-4xl font-black leading-[0.95] tracking-tight text-black sm:text-6xl lg:text-7xl">
+            <h1 className="font-heading text-[60px] font-bold uppercase leading-none tracking-[-1.5px]">
               TRAIN WITH INTENT.
               <br />
               LOG EVERY SET.
             </h1>
 
-            <p className="mt-5 max-w-xl text-sm leading-6 text-gray-600 sm:mt-6 sm:text-lg sm:leading-7">
-              FitLog is a dark, no-nonsense gym companion: pick a lift,
-              lock it into today&apos;s plan, and watch the week&apos;s work
-              add up.
+            <p className="mt-5 max-w-[512px] text-sm leading-6 text-[#8d929d]">
+              FitLog is a dark, no-nonsense gym companion:
+              pick a lift, lock it into today&apos;s plan,
+              and watch the week&apos;s work add up.
             </p>
 
             <Link
               href="#library"
-              className="mt-7 inline-flex items-center rounded-md bg-black px-5 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-gray-800 sm:mt-8 sm:px-6"
+              className="mt-5 inline-flex h-10 items-center bg-[#c2f800] px-6 text-xs font-bold uppercase text-[#0c0d10] transition hover:bg-[#d5ff38]"
             >
               BROWSE WORKOUTS
-
-              <span
-                className="ml-3 text-lg"
-                aria-hidden="true"
-              >
-                →
-              </span>
             </Link>
           </div>
 
-          <div className="relative mx-auto w-full max-w-xl">
-            <div className="overflow-hidden rounded-2xl bg-gray-100">
-              <Image
-                src="/banner.png"
-                alt="FitLog workout training"
-                width={334}
-                height={334}
-                priority
-                className="h-auto w-full object-cover"
-              />
-            </div>
+          {/* Banner */}
+          <div className="flex justify-end">
+            <Image
+              src="/banner.png"
+              alt="FitLog training"
+              width={334}
+              height={334}
+              priority
+              className="h-[334px] w-[334px] object-cover"
+            />
           </div>
         </div>
       </section>
 
-      {/* Library */}
+      {/* LIBRARY */}
       <section
         id="library"
-        className="mx-auto max-w-7xl px-5 py-12 sm:px-8 sm:py-16 lg:px-10 lg:py-20"
+        className="mx-auto max-w-[1280px] px-6 pb-24"
       >
-        <div className="mb-8 sm:mb-10">
-          <p className="text-xs font-bold tracking-[0.2em] text-gray-500 sm:text-sm">
+        <div className="mb-10">
+          <h2 className="font-heading text-3xl font-bold uppercase tracking-[-0.75px]">
             THE LIBRARY
-          </p>
-
-          <h2 className="mt-2 text-3xl font-black tracking-tight sm:text-4xl">
-            Workout Library
           </h2>
 
-          <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-600 sm:text-base">
+          <p className="mt-2 text-sm text-[#8d929d]">
             Twelve lifts covering every major muscle group.
           </p>
         </div>
