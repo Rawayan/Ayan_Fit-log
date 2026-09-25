@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Oswald } from "next/font/google";
+import { Suspense } from "react";
 
 import "./globals.css";
 
@@ -39,7 +40,9 @@ export default function RootLayout({
     >
       <body>
         <FitLogProvider>
-          <Navbar />
+          <Suspense fallback={<div className="h-[67px]" />}>
+            <Navbar />
+          </Suspense>
           {children}
           <Footer />
         </FitLogProvider>

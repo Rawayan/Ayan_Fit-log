@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -10,6 +11,11 @@ export default function Navbar() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { plan, saved } = useFitLog();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const savedTabActive =
     pathname.startsWith("/my-plan") &&
@@ -21,6 +27,9 @@ export default function Navbar() {
 
   const planActive =
     pathname.startsWith("/my-plan");
+
+  const planCount = mounted ? plan.length : 0;
+  const savedCount = mounted ? saved.length : 0;
 
   return (
     <header className="sticky top-0 z-50 h-[67px] border-b border-[#292d35] bg-[#0f1115]">
@@ -81,7 +90,7 @@ export default function Navbar() {
             <span>Plan</span>
 
             <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[#c2f800] px-1.5 text-[11px] font-bold text-[#0c0d10]">
-              {plan.length}
+              {planCount}
             </span>
           </Link>
 
@@ -96,7 +105,7 @@ export default function Navbar() {
             <span>Saved</span>
 
             <span className="flex h-5 min-w-5 items-center justify-center rounded-full border border-[#3a3f48] px-1.5 text-[11px] font-bold text-white">
-              {saved.length}
+              {savedCount}
             </span>
           </Link>
         </div>

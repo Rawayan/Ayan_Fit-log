@@ -22,6 +22,7 @@ type FitLogContextType = {
   plan: Workout[];
   saved: Workout[];
   completed: string[];
+  hydrated: boolean;
   addToPlan: (workout: Workout) => boolean;
   removeFromPlan: (workoutId: string | number) => void;
   saveWorkout: (workout: Workout) => boolean;
@@ -206,6 +207,7 @@ export function FitLogProvider({
       plan,
       saved,
       completed,
+      hydrated,
       addToPlan,
       removeFromPlan,
       saveWorkout,
@@ -215,7 +217,7 @@ export function FitLogProvider({
       isInPlan,
       isSaved,
     }),
-    [plan, saved, completed]
+    [plan, saved, completed, hydrated]
   );
 
   return (
