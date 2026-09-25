@@ -3,6 +3,7 @@
 import {
   createContext,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -10,6 +11,12 @@ import {
 import type { Workout } from "@/types/workout";
 
 const MAX_PLAN_ITEMS = 5;
+
+const STORAGE_KEYS = {
+  plan: "fitlog-plan",
+  saved: "fitlog-saved",
+  completed: "fitlog-completed",
+};
 
 type FitLogContextType = {
   plan: Workout[];
@@ -37,6 +44,78 @@ export function FitLogProvider({
   const [plan, setPlan] = useState<Workout[]>([]);
   const [saved, setSaved] = useState<Workout[]>([]);
   const [completed, setCompleted] = useState<string[]>([]);
+  const [hydrated, setHydrated] = useState(false);
+
+  // Load saved data from localStorage
+  useEffect(() => {
+    try {
+      const storedPlan = localStorage.getItem(STORAGE_KEYS.plan);
+      const storedSaved = localStorage.getItem(STORAGE_KEYS.saved);
+      const storedCompleted = localStorage.getItem(
+        STORAGE_KEYS.completed
+      );
+
+      if (storedPlan) {
+        const parsedPlan = JSON.parse(storedPlan);
+
+        if (Array.isArray(parsedPlan)) {
+          setPlan(parsedPlan);
+        }
+      }
+
+      if (storedSaved) {
+        const parsedSaved = JSON.parse(storedSaved);
+
+        if (Array.isArray(parsedSaved)) {
+          setSaved(parsedSaved);
+        }
+      }
+
+      if (storedCompleted) {
+        const parsedCompleted = JSON.parse(storedCompleted);
+
+        if (Array.isArray(parsedCompleted)) {
+          setCompleted(parsedCompleted.map(String));
+        }
+      }
+    } catch {
+      localStorage.removeItem(STORAGE_KEYS.plan);
+      localStorage.removeItem(STORAGE_KEYS.saved);
+      localStorage.removeItem(STORAGE_KEYS.completed);
+    } finally {
+      setHydrated(true);
+    }
+  }, []);
+
+  // Save plan
+  useEffect(() => {
+    if (!hydrated) return;
+
+    localStorage.setItem(
+      STORAGE_KEYS.plan,
+      JSON.stringify(plan)
+    );
+  }, [plan, hydrated]);
+
+  // Save saved workouts
+  useEffect(() => {
+    if (!hydrated) return;
+
+    localStorage.setItem(
+      STORAGE_KEYS.saved,
+      JSON.stringify(saved)
+    );
+  }, [saved, hydrated]);
+
+  // Save completed workouts
+  useEffect(() => {
+    if (!hydrated) return;
+
+    localStorage.setItem(
+      STORAGE_KEYS.completed,
+      JSON.stringify(completed)
+    );
+  }, [completed, hydrated]);
 
   function addToPlan(workout: Workout) {
     if (
@@ -52,7 +131,6 @@ export function FitLogProvider({
     }
 
     setPlan((current) => [...current, workout]);
-
     return true;
   }
 
@@ -66,7 +144,9 @@ export function FitLogProvider({
     );
 
     setCompleted((current) =>
-      current.filter((completedId) => completedId !== id)
+      current.filter(
+        (completedId) => completedId !== id
+      )
     );
   }
 
@@ -80,7 +160,6 @@ export function FitLogProvider({
     }
 
     setSaved((current) => [...current, workout]);
-
     return true;
   }
 
