@@ -1,3 +1,5 @@
+"use client";
+
 type ErrorStateProps = {
   message?: string;
 };
@@ -7,14 +9,14 @@ export default function ErrorState({
 }: ErrorStateProps) {
   return (
     <div
-      className="rounded-xl border border-red-200 bg-red-50 p-8 text-center"
+      className="rounded-xl border border-red-200 bg-red-50 p-6 text-center sm:p-8"
       role="alert"
     >
       <h3 className="text-lg font-black text-red-700">
         SOMETHING WENT WRONG
       </h3>
 
-      <p className="mt-2 text-sm text-red-600">
+      <p className="mx-auto mt-2 max-w-lg text-sm leading-6 text-red-600">
         {message}
       </p>
 

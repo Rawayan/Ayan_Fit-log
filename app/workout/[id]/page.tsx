@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 import { getWorkout } from "@/lib/api";
 import Badge from "@/components/ui/Badge";
@@ -22,6 +23,25 @@ function getCategories(category: string | string[]) {
     .filter(Boolean);
 }
 
+type SpecCardProps = {
+  label: string;
+  value: string | number;
+};
+
+function SpecCard({ label, value }: SpecCardProps) {
+  return (
+    <div className="rounded-xl border border-gray-200 bg-white p-4">
+      <p className="text-xs font-bold uppercase tracking-[0.12em] text-gray-400">
+        {label}
+      </p>
+
+      <p className="mt-2 text-lg font-black text-black">
+        {value || "—"}
+      </p>
+    </div>
+  );
+}
+
 export default async function WorkoutDetailPage({
   params,
 }: WorkoutDetailPageProps) {
@@ -32,45 +52,30 @@ export default async function WorkoutDetailPage({
   try {
     workout = await getWorkout(id);
   } catch {
-    return (
-      <main className="min-h-screen bg-gray-50 px-6 py-16">
-        <div className="mx-auto max-w-4xl text-center">
-          <h1 className="text-4xl font-black">
-            WORKOUT NOT FOUND
-          </h1>
-
-          <p className="mt-4 text-gray-600">
-            The workout you are looking for could not be found.
-          </p>
-
-          <Link
-            href="/"
-            className="mt-8 inline-flex rounded-md bg-black px-6 py-3 text-sm font-bold text-white hover:bg-gray-800"
-          >
-            BACK TO WORKOUTS
-          </Link>
-        </div>
-      </main>
-    );
+    notFound();
   }
 
   const categories = getCategories(workout.category);
 
   return (
     <main className="min-h-screen bg-gray-50">
-      {/* Header */}
+      {/* Back to Library */}
       <section className="border-b border-black bg-white">
         <div className="mx-auto max-w-7xl px-6 py-8 sm:px-8 lg:px-10">
           <Link
             href="/"
-            className="text-sm font-bold text-gray-500 transition hover:text-black"
+            className="inline-flex items-center text-sm font-bold text-gray-500 transition hover:text-black"
           >
-            ← BACK TO LIBRARY
+            <span className="mr-2 text-lg" aria-hidden="true">
+              ←
+            </span>
+
+            BACK TO LIBRARY
           </Link>
         </div>
       </section>
 
-      {/* Main Content */}
+      {/* Workout Overview */}
       <section className="mx-auto max-w-7xl px-6 py-10 sm:px-8 lg:px-10 lg:py-16">
         <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
           {/* Image */}
@@ -91,107 +96,70 @@ export default async function WorkoutDetailPage({
             )}
           </div>
 
-          {/* Details */}
+          {/* Workout Information */}
           <div>
             {/* Categories */}
             {categories.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 {categories.map((category) => (
-                  <Badge key={category}>{category}</Badge>
+                  <Badge key={category}>
+                    {category}
+                  </Badge>
                 ))}
               </div>
             )}
 
-            <h1 className="mt-5 text-4xl font-black tracking-tight sm:text-5xl">
+            {/* Title */}
+            <h1 className="mt-5 text-4xl font-black tracking-tight text-black sm:text-5xl">
               {workout.name}
             </h1>
 
+            {/* Description */}
             <p className="mt-6 text-base leading-7 text-gray-600">
-              {workout.description}
+              {workout.description ||
+                "No description available for this workout."}
             </p>
 
-            {/* Specifications */}
+            {/* Workout Specs */}
             <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3">
-              <div className="rounded-xl border border-gray-200 bg-white p-4">
-                <p className="text-xs font-bold uppercase tracking-wide text-gray-400">
-                  Equipment
-                </p>
-                <p className="mt-2 font-bold">
-                  {workout.equipment || "None"}
-                </p>
-              </div>
+              <SpecCard
+                label="Equipment"
+                value={workout.equipment}
+              />
 
-              <div className="rounded-xl border border-gray-200 bg-white p-4">
-                <p className="text-xs font-bold uppercase tracking-wide text-gray-400">
-                  Difficulty
-                </p>
-                <p className="mt-2 font-bold">
-                  {workout.difficulty || "N/A"}
-                </p>
-              </div>
+              <SpecCard
+                label="Difficulty"
+                value={workout.difficulty}
+              />
 
-              <div className="rounded-xl border border-gray-200 bg-white p-4">
-                <p className="text-xs font-bold uppercase tracking-wide text-gray-400">
-                  Sets
-                </p>
-                <p className="mt-2 font-bold">
-                  {workout.sets}
-                </p>
-              </div>
+              <SpecCard
+                label="Sets"
+                value={workout.sets}
+              />
 
-              <div className="rounded-xl border border-gray-200 bg-white p-4">
-                <p className="text-xs font-bold uppercase tracking-wide text-gray-400">
-                  Reps
-                </p>
-                <p className="mt-2 font-bold">
-                  {workout.reps}
-                </p>
-              </div>
+              <SpecCard
+                label="Reps"
+                value={workout.reps}
+              />
 
-              <div className="rounded-xl border border-gray-200 bg-white p-4">
-                <p className="text-xs font-bold uppercase tracking-wide text-gray-400">
-                  Duration
-                </p>
-                <p className="mt-2 font-bold">
-                  {workout.duration} min
-                </p>
-              </div>
+              <SpecCard
+                label="Duration"
+                value={`${workout.duration} min`}
+              />
 
-              <div className="rounded-xl border border-gray-200 bg-white p-4">
-                <p className="text-xs font-bold uppercase tracking-wide text-gray-400">
-                  Calories
-                </p>
-                <p className="mt-2 font-bold">
-                  {workout.calories}
-                </p>
-              </div>
+              <SpecCard
+                label="Calories"
+                value={workout.calories}
+              />
 
-              <div className="rounded-xl border border-gray-200 bg-white p-4 sm:col-span-3">
-                <p className="text-xs font-bold uppercase tracking-wide text-gray-400">
-                  Rating
-                </p>
-                <p className="mt-2 font-bold">
-                  ★ {workout.rating}
-                </p>
-              </div>
+              <SpecCard
+                label="Rating"
+                value={`★ ${workout.rating}`}
+              />
             </div>
 
             {/* Actions */}
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <button
-                type="button"
-                className="rounded-md bg-black px-6 py-3 text-sm font-bold text-white transition hover:bg-gray-800"
-              >
-                ADD TO TODAY&apos;S PLAN
-              </button>
-
-              <button
-                type="button"
-                className="rounded-md border border-black bg-white px-6 py-3 text-sm font-bold text-black transition hover:bg-black hover:text-white"
-              >
-                SAVE FOR LATER
-              </button>
-            </div>
+            <WorkoutActions workout={workout} />
           </div>
         </div>
       </section>
@@ -203,32 +171,53 @@ export default async function WorkoutDetailPage({
             HOW TO TRAIN
           </p>
 
-          <h2 className="mt-2 text-3xl font-black tracking-tight">
+          <h2 className="mt-2 text-3xl font-black tracking-tight text-black sm:text-4xl">
             INSTRUCTIONS
           </h2>
 
           {workout.instructions.length > 0 ? (
-            <ol className="mt-8 space-y-5">
-              {workout.instructions.map((instruction, index) => (
-                <li
-                  key={`${index}-${instruction}`}
-                  className="flex gap-4"
-                >
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-black text-sm font-bold text-white">
-                    {index + 1}
-                  </span>
+            <ol className="mt-8 max-w-4xl space-y-5">
+              {workout.instructions.map(
+                (instruction, index) => (
+                  <li
+                    key={`${index}-${instruction}`}
+                    className="flex gap-4"
+                  >
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-black text-sm font-bold text-white">
+                      {index + 1}
+                    </span>
 
-                  <p className="pt-1 leading-6 text-gray-600">
-                    {instruction}
-                  </p>
-                </li>
-              ))}
+                    <p className="pt-1 leading-6 text-gray-600">
+                      {instruction}
+                    </p>
+                  </li>
+                )
+              )}
             </ol>
           ) : (
             <p className="mt-6 text-gray-600">
               No instructions available for this workout.
             </p>
           )}
+        </div>
+      </section>
+
+      {/* Bottom CTA */}
+      <section className="border-t border-gray-200 bg-gray-50">
+        <div className="mx-auto max-w-7xl px-6 py-10 text-center sm:px-8 lg:px-10">
+          <Link
+            href="/"
+            className="inline-flex items-center rounded-md bg-black px-6 py-3 text-sm font-bold text-white transition hover:bg-gray-800"
+          >
+            BROWSE MORE WORKOUTS
+
+            <span
+              className="ml-3 text-lg"
+              aria-hidden="true"
+            >
+              →
+            </span>
+          </Link>
         </div>
       </section>
     </main>

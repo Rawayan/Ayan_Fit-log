@@ -7,6 +7,8 @@ import Link from "next/link";
 import { useFitLog } from "@/context/FitLogContext";
 import EmptyState from "@/components/ui/EmptyState";
 
+import type { Workout } from "@/types/workout";
+
 type Tab = "today" | "saved";
 
 export default function MyPlanPage() {
@@ -17,6 +19,8 @@ export default function MyPlanPage() {
     saved,
     removeFromPlan,
     removeSaved,
+    markDone,
+    isCompleted,
   } = useFitLog();
 
   const activeWorkouts =
@@ -92,6 +96,7 @@ export default function MyPlanPage() {
             }`}
           >
             TODAY&apos;S PLAN
+
             <span className="ml-2 rounded-full bg-gray-100 px-2 py-0.5 text-xs">
               {plan.length}
             </span>
@@ -107,6 +112,7 @@ export default function MyPlanPage() {
             }`}
           >
             SAVED
+
             <span className="ml-2 rounded-full bg-gray-100 px-2 py-0.5 text-xs">
               {saved.length}
             </span>
@@ -137,6 +143,8 @@ export default function MyPlanPage() {
                 workout={workout}
                 activeTab={activeTab}
                 onRemove={handleRemove}
+                onMarkDone={markDone}
+                isCompleted={isCompleted(workout.id)}
               />
             ))}
           </div>
@@ -145,6 +153,10 @@ export default function MyPlanPage() {
     </main>
   );
 }
+
+/* =========================
+   Metric Card
+========================= */
 
 type MetricCardProps = {
   label: string;
@@ -168,21 +180,35 @@ function MetricCard({
   );
 }
 
+/* =========================
+   Workout Plan Card
+========================= */
+
 type WorkoutPlanCardProps = {
-  workout: import("@/types/workout").Workout;
+  workout: Workout;
   activeTab: Tab;
   onRemove: (id: string | number) => void;
+  onMarkDone: (id: string | number) => void;
+  isCompleted: boolean;
 };
 
 function WorkoutPlanCard({
   workout,
   activeTab,
   onRemove,
+  onMarkDone,
+  isCompleted,
 }: WorkoutPlanCardProps) {
   return (
-    <article className="overflow-hidden rounded-xl border border-gray-200 bg-white">
+    <article
+      className={`overflow-hidden rounded-xl border bg-white transition ${
+        isCompleted
+          ? "border-green-200 opacity-75"
+          : "border-gray-200"
+      }`}
+    >
       <div className="flex flex-col sm:flex-row">
-        {/* Thumbnail */}
+        {/* Image */}
         <div className="relative h-52 w-full shrink-0 bg-gray-100 sm:h-auto sm:w-56">
           {workout.image ? (
             <Image
@@ -202,7 +228,13 @@ function WorkoutPlanCard({
         {/* Content */}
         <div className="flex flex-1 flex-col justify-between p-5">
           <div>
-            <h2 className="text-xl font-black">
+            <h2
+              className={`text-xl font-black ${
+                isCompleted
+                  ? "text-gray-500 line-through"
+                  : "text-black"
+              }`}
+            >
               {workout.name}
             </h2>
 
@@ -210,7 +242,8 @@ function WorkoutPlanCard({
               {workout.equipment || "No equipment"}
             </p>
 
-            <div className="mt-4 flex flex-wrap gap-4 text-sm">
+            {/* Stats */}
+            <div className="mt-4 flex flex-wrap gap-4 text-sm text-gray-700">
               <span>
                 <strong>{workout.duration}</strong> min
               </span>
@@ -223,10 +256,18 @@ function WorkoutPlanCard({
                 <strong>★ {workout.rating}</strong>
               </span>
             </div>
+
+            {/* Completed Badge */}
+            {isCompleted && activeTab === "today" && (
+              <span className="mt-4 inline-flex rounded-full bg-green-50 px-3 py-1 text-xs font-bold text-green-700">
+                COMPLETED
+              </span>
+            )}
           </div>
 
           {/* Actions */}
           <div className="mt-6 flex flex-wrap gap-3">
+            {/* View Details */}
             <Link
               href={`/workout/${workout.id}`}
               className="rounded-md bg-black px-4 py-2.5 text-xs font-bold text-white transition hover:bg-gray-800"
@@ -234,15 +275,22 @@ function WorkoutPlanCard({
               VIEW DETAILS
             </Link>
 
+            {/* Mark Done */}
             {activeTab === "today" && (
               <button
                 type="button"
-                className="rounded-md border border-gray-300 px-4 py-2.5 text-xs font-bold text-gray-700 transition hover:border-black hover:text-black"
+                onClick={() => onMarkDone(workout.id)}
+                className={`rounded-md border px-4 py-2.5 text-xs font-bold transition ${
+                  isCompleted
+                    ? "border-green-300 bg-green-50 text-green-700 hover:bg-green-100"
+                    : "border-gray-300 text-gray-700 hover:border-black hover:text-black"
+                }`}
               >
-                MARK DONE
+                {isCompleted ? "DONE" : "MARK DONE"}
               </button>
             )}
 
+            {/* Remove */}
             <button
               type="button"
               onClick={() => onRemove(workout.id)}
