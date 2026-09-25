@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import type { Workout } from "@/types/workout";
 import { getWorkouts } from "@/lib/api";
+import WorkoutCard from "@/components/WorkoutCard";
 import Loader from "@/components/ui/Loader";
 import ErrorState from "@/components/ui/ErrorState";
 
@@ -57,25 +58,13 @@ export default function WorkoutLibrary() {
   }
 
   return (
-    <div>
-      <p className="mb-6 text-sm text-gray-500">
-        Loaded {workouts.length} workouts.
-      </p>
-
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {workouts.map((workout) => (
-          <div
-            key={workout.id}
-            className="rounded-xl border border-gray-200 bg-white p-5"
-          >
-            <h3 className="font-bold">{workout.name}</h3>
-
-            <p className="mt-2 text-sm text-gray-600">
-              {workout.description}
-            </p>
-          </div>
-        ))}
-      </div>
+    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {workouts.map((workout) => (
+        <WorkoutCard
+          key={workout.id}
+          workout={workout}
+        />
+      ))}
     </div>
   );
 }

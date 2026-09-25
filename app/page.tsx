@@ -54,26 +54,22 @@ export default function Home() {
       </section>
 
       {/* Workout Library */}
-      <section
+    <section
         id="library"
         className="mx-auto max-w-7xl px-6 py-16 sm:px-8 lg:px-10"
-      >
-        <p className="text-sm font-bold tracking-[0.2em] text-gray-500">
-          THE LIBRARY
-        </p>
-
-        <h2 className="mt-2 text-3xl font-black tracking-tight sm:text-4xl">
-          Workout Library
+ >
+        <h2 className="text-3xl font-black tracking-tight sm:text-4xl">
+           THE LIBRARY
         </h2>
 
         <p className="mt-3 text-gray-600">
-          Your workouts will appear here in the next step.
+          Twelve lifts covering every major muscle group.
         </p>
 
         <div className="mt-10">
-          <WorkoutLibrary />
+         <WorkoutLibrary />
         </div>
-      </section>
+    </section>
     </main>
   );
 }
