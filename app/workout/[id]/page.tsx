@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { getWorkout } from "@/lib/api";
 import Badge from "@/components/ui/Badge";
+import WorkoutActions from "@/components/WorkoutActions";
 
 type WorkoutDetailPageProps = {
   params: Promise<{

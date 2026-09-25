@@ -4,16 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-interface NavbarProps {
-  planCount?: number;
-  savedCount?: number;
-}
+import { useFitLog } from "@/context/FitLogContext";
 
-export default function Navbar({
-  planCount = 0,
-  savedCount = 0,
-}: NavbarProps) {
+export default function Navbar() {
   const pathname = usePathname();
+  const { plan, saved } = useFitLog();
 
   const isWorkoutActive =
     pathname === "/" || pathname.startsWith("/workout");
@@ -21,8 +16,8 @@ export default function Navbar({
   const isPlanActive = pathname.startsWith("/my-plan");
 
   return (
-    <header className="sticky top-0 z-50 border-b border-black/10 bg-white">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 border-b border-black bg-white">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 sm:px-8 lg:px-10">
         {/* Logo */}
         <Link
           href="/"
@@ -31,10 +26,9 @@ export default function Navbar({
         >
           <Image
             src="/logo.png"
-            alt="FitLog logo"
+            alt="FitLog"
             width={28}
             height={28}
-            priority
           />
 
           <span className="text-xl font-black tracking-tight">
@@ -43,53 +37,52 @@ export default function Navbar({
         </Link>
 
         {/* Navigation */}
-        <nav
-          className="flex items-center gap-2 sm:gap-4"
-          aria-label="Main navigation"
-        >
+        <nav className="flex items-center gap-2 sm:gap-4">
           <Link
             href="/"
-            className={`rounded-md px-3 py-2 text-sm font-semibold transition-colors ${
+            className={`rounded-md px-3 py-2 text-sm font-bold transition ${
               isWorkoutActive
                 ? "bg-black text-white"
-                : "text-gray-700 hover:bg-gray-100"
+                : "text-gray-600 hover:bg-gray-100 hover:text-black"
             }`}
           >
-            Workout
+            WORKOUT
           </Link>
 
           <Link
             href="/my-plan"
-            className={`rounded-md px-3 py-2 text-sm font-semibold transition-colors ${
+            className={`rounded-md px-3 py-2 text-sm font-bold transition ${
               isPlanActive
                 ? "bg-black text-white"
-                : "text-gray-700 hover:bg-gray-100"
+                : "text-gray-600 hover:bg-gray-100 hover:text-black"
             }`}
           >
-            My Plan
+            MY PLAN
+          </Link>
+
+          {/* Counters */}
+          <Link
+            href="/my-plan"
+            className="hidden items-center gap-2 rounded-full border border-gray-200 px-3 py-1.5 text-xs font-bold sm:flex"
+          >
+            <span>PLAN</span>
+
+            <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-black px-1.5 text-white">
+              {plan.length}
+            </span>
+          </Link>
+
+          <Link
+            href="/my-plan"
+            className="hidden items-center gap-2 rounded-full border border-gray-200 px-3 py-1.5 text-xs font-bold sm:flex"
+          >
+            <span>SAVED</span>
+
+            <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-black px-1.5 text-white">
+              {saved.length}
+            </span>
           </Link>
         </nav>
-
-        {/* Counters */}
-        <div className="flex items-center gap-2 sm:gap-3">
-          <Link
-            href="/my-plan"
-            className="flex items-center gap-1.5 rounded-full border border-black px-3 py-1.5 text-xs font-bold transition-colors hover:bg-black hover:text-white"
-            aria-label={`${planCount} workouts in today's plan`}
-          >
-            <span className="hidden sm:inline">Plan</span>
-            <span>{planCount}</span>
-          </Link>
-
-          <Link
-            href="/my-plan"
-            className="flex items-center gap-1.5 rounded-full border border-black px-3 py-1.5 text-xs font-bold transition-colors hover:bg-black hover:text-white"
-            aria-label={`${savedCount} saved workouts`}
-          >
-            <span className="hidden sm:inline">Saved</span>
-            <span>{savedCount}</span>
-          </Link>
-        </div>
       </div>
     </header>
   );
