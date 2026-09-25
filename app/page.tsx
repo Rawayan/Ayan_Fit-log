@@ -5,10 +5,10 @@ import WorkoutLibrary from "@/components/WorkoutLibrary";
 
 export default function Home() {
   return (
-    <main className="bg-[#0c0d10]">
+    <main>
       {/* HERO */}
-      <section className="mx-auto max-w-[1280px] px-6">
-        <div className="grid min-h-[574px] grid-cols-2 items-center gap-20 px-[57px]">
+      <section className="mx-auto max-w-[1280px] px-6 pt-6">
+        <div className="grid min-h-[460px] grid-cols-2 items-center gap-20 rounded-2xl bg-[#222630] px-[57px] py-12">
           {/* Left */}
           <div className="max-w-[558px]">
             <p className="mb-5 text-[11px] font-bold uppercase tracking-[0.1em] text-[#c2f800]">
@@ -29,7 +29,7 @@ export default function Home() {
 
             <Link
               href="#library"
-              className="mt-5 inline-flex h-10 items-center bg-[#c2f800] px-6 text-xs font-bold uppercase text-[#0c0d10] transition hover:bg-[#d5ff38]"
+              className="mt-5 inline-flex h-10 items-center rounded-md bg-[#c2f800] px-6 text-xs font-bold uppercase text-[#0c0d10] transition hover:bg-[#d5ff38]"
             >
               BROWSE WORKOUTS
             </Link>
@@ -43,7 +43,7 @@ export default function Home() {
               width={334}
               height={334}
               priority
-              className="h-[334px] w-[334px] object-cover"
+              className="h-[334px] w-[334px] object-cover "
             />
           </div>
         </div>
@@ -52,7 +52,7 @@ export default function Home() {
       {/* LIBRARY */}
       <section
         id="library"
-        className="mx-auto max-w-[1280px] px-6 pb-24"
+        className="mx-auto max-w-[1280px] px-6 pb-24 pt-8"
       >
         <div className="mb-10">
           <h2 className="font-heading text-3xl font-bold uppercase tracking-[-0.75px]">

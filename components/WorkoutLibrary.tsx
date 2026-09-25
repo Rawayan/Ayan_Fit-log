@@ -97,7 +97,7 @@ export default function WorkoutLibrary() {
 
   if (workouts.length === 0) {
     return (
-      <div className="border border-[#292d35] bg-[#15171d] px-6 py-20 text-center">
+      <div className="overflow-hidden rounded-xl border border-[#292d35] bg-[#15171d] px-6 py-20 text-center">
         <h3 className="font-heading text-2xl font-bold uppercase text-white">
           NO WORKOUTS FOUND
         </h3>
@@ -131,7 +131,7 @@ export default function WorkoutLibrary() {
                 setSearch(event.target.value)
               }
               placeholder="Search workouts..."
-              className="h-10 w-full border border-[#292d35] bg-[#15171d] px-4 pr-10 text-sm text-white outline-none placeholder:text-[#5f646d] focus:border-[#c2f800]"
+              className="h-10 w-full rounded-md border border-[#292d35] bg-[#15171d] px-4 pr-10 text-sm text-white outline-none placeholder:text-[#5f646d] focus:border-[#c2f800]"
             />
 
             {search && (
@@ -164,7 +164,7 @@ export default function WorkoutLibrary() {
                 event.target.value as SortOption
               )
             }
-            className="h-10 border border-[#292d35] bg-[#15171d] px-4 text-sm text-white outline-none focus:border-[#c2f800]"
+            className="h-10 rounded-md border border-[#292d35] bg-[#15171d] px-4 text-sm text-white outline-none focus:border-[#c2f800]"
           >
             <option value="duration">
               Duration
@@ -202,7 +202,7 @@ export default function WorkoutLibrary() {
 
       {/* Results */}
       {filteredAndSortedWorkouts.length === 0 ? (
-        <div className="border border-dashed border-[#292d35] bg-[#15171d] px-6 py-20 text-center">
+        <div className="overflow-hidden rounded-xl border border-dashed border-[#292d35] bg-[#15171d] px-6 py-20 text-center">
           <h3 className="font-heading text-2xl font-bold uppercase text-white">
             NOTHING FOUND
           </h3>
@@ -215,7 +215,7 @@ export default function WorkoutLibrary() {
           <button
             type="button"
             onClick={() => setSearch("")}
-            className="mt-6 bg-[#c2f800] px-6 py-3 text-xs font-bold uppercase text-[#0c0d10] transition hover:bg-[#d5ff38]"
+            className="mt-6 rounded-md bg-[#c2f800] px-6 py-3 text-xs font-bold uppercase text-[#0c0d10] transition hover:bg-[#d5ff38]"
           >
             CLEAR SEARCH
           </button>

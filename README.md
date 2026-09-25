@@ -38,5 +38,4 @@ FitLog uses the following external API:
 
 ### Get All Workouts
 
-```text
 https://api.abcz.workers.dev/api/fitlog

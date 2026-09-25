@@ -92,7 +92,7 @@ export default async function WorkoutDetailPage({
       <section className="mx-auto max-w-[1280px] px-6 py-10 lg:py-14">
         <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:gap-14">
           {/* Image */}
-          <div className="relative aspect-[4/3] overflow-hidden bg-[#15171d] lg:aspect-auto lg:min-h-[600px]">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-[#15171d] lg:aspect-auto lg:min-h-[600px]">
             {workout.image ? (
               <Image
                 src={workout.image}
@@ -137,7 +137,7 @@ export default async function WorkoutDetailPage({
             </p>
 
             {/* Specs */}
-            <div className="mt-8 border border-[#292d35] bg-[#151922]">
+            <div className="mt-8 overflow-hidden rounded-xl border border-[#292d35] bg-[#151922]">
               <SpecRow
                 label="Equipment"
                 value={workout.equipment}
@@ -225,7 +225,7 @@ export default async function WorkoutDetailPage({
         <div className="mx-auto max-w-[1280px] px-6 py-10 text-center">
           <Link
             href="/"
-            className="inline-flex h-11 items-center bg-[#c2f800] px-7 text-xs font-bold uppercase text-[#0c0d10] transition hover:bg-[#d5ff38]"
+            className="inline-flex h-11 items-center rounded-md bg-[#c2f800] px-7 text-xs font-bold uppercase text-[#0c0d10] transition hover:bg-[#d5ff38]"
           >
             Browse More Workouts
             <span

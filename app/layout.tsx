@@ -22,6 +22,9 @@ export const metadata: Metadata = {
   title: "FitLog — Workout Library",
   description:
     "FitLog is a dark, no-nonsense gym companion.",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({

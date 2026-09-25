@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
 
 import { useFitLog } from "@/context/FitLogContext";
 import Toast from "@/components/ui/Toast";
@@ -12,11 +13,27 @@ import type { Workout } from "@/types/workout";
 type Tab = "today" | "saved";
 
 export default function MyPlanPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get("tab");
+  const initialTab: Tab =
+    tabParam === "saved" ? "saved" : "today";
+
   const [activeTab, setActiveTab] =
-    useState<Tab>("today");
+    useState<Tab>(initialTab);
 
   const [toast, setToast] =
     useState("");
+
+  // Sync active tab with URL query param
+  useEffect(() => {
+    const urlTab = searchParams.get("tab");
+    if (urlTab === "saved" && activeTab !== "saved") {
+      setActiveTab("saved");
+    } else if (urlTab !== "saved" && activeTab !== "today") {
+      setActiveTab("today");
+    }
+  }, [searchParams, activeTab]);
 
   const {
     plan,
@@ -82,7 +99,7 @@ export default function MyPlanPage() {
   }
 
   return (
-    <main className="min-h-[630px] bg-[#0c0d10]">
+    <main>
       <section className="mx-auto max-w-[1280px] px-6 py-10">
         <h1 className="font-heading text-3xl font-bold uppercase">
           MY PLAN
@@ -116,9 +133,10 @@ export default function MyPlanPage() {
           <div className="flex">
             <button
               type="button"
-              onClick={() =>
-                setActiveTab("today")
-              }
+              onClick={() => {
+                setActiveTab("today");
+                router.replace("/my-plan");
+              }}
               className={`px-5 py-3 text-sm ${
                 activeTab === "today"
                   ? "border-b-2 border-[#c2f800] text-white"
@@ -130,9 +148,10 @@ export default function MyPlanPage() {
 
             <button
               type="button"
-              onClick={() =>
-                setActiveTab("saved")
-              }
+              onClick={() => {
+                setActiveTab("saved");
+                router.replace("/my-plan?tab=saved");
+              }}
               className={`px-5 py-3 text-sm ${
                 activeTab === "saved"
                   ? "border-b-2 border-[#c2f800] text-white"
@@ -147,7 +166,7 @@ export default function MyPlanPage() {
         {/* Cards */}
         <div className="mt-6">
           {activeWorkouts.length === 0 ? (
-            <div className="flex h-[300px] flex-col items-center justify-center border border-[#292d35] bg-[#15171d] text-center">
+            <div className="flex h-[300px] flex-col items-center justify-center overflow-hidden rounded-xl border border-[#292d35] bg-[#15171d] text-center">
               <h2 className="font-heading text-xl font-bold uppercase">
                 NOTHING HERE YET
               </h2>
@@ -158,7 +177,7 @@ export default function MyPlanPage() {
 
               <Link
                 href="/"
-                className="mt-5 bg-[#c2f800] px-6 py-2.5 text-xs font-bold uppercase text-[#0c0d10]"
+                className="mt-5 rounded-md bg-[#c2f800] px-6 py-2.5 text-xs font-bold uppercase text-[#0c0d10]"
               >
                 Go to workouts
               </Link>
@@ -175,7 +194,7 @@ export default function MyPlanPage() {
                   return (
                     <article
                       key={workout.id}
-                      className={`flex min-h-[114px] items-center justify-between border bg-[#14171e] px-4 py-4 ${
+                      className={`flex min-h-[114px] items-center justify-between rounded-xl border bg-[#14171e] px-4 py-4 ${
                         completed
                           ? "border-[#3e5412]"
                           : "border-[#292d35]"
@@ -228,7 +247,7 @@ export default function MyPlanPage() {
                       <div className="flex items-center gap-2">
                         <Link
                           href={`/workout/${workout.id}`}
-                          className="border border-[#3a3f48] px-4 py-2 text-xs text-white hover:border-[#c2f800]"
+                          className="flex h-10 items-center rounded-md border border-[#3a3f48] px-4 text-xs text-white hover:border-[#c2f800]"
                         >
                           View Details
                         </Link>
@@ -242,7 +261,7 @@ export default function MyPlanPage() {
                                 workout.name
                               )
                             }
-                            className="border border-[#3a3f48] px-4 py-2 text-xs text-white hover:border-[#c2f800]"
+                            className="flex h-10 items-center rounded-md border border-[#3a3f48] px-4 text-xs text-white hover:border-[#c2f800]"
                           >
                             {completed
                               ? "DONE"
@@ -258,7 +277,7 @@ export default function MyPlanPage() {
                               workout.name
                             )
                           }
-                          className="flex h-8 w-8 items-center justify-center border border-[#3a3f48] text-[#8d929d] hover:border-red-500 hover:text-red-400"
+                          className="flex h-10 w-10 items-center justify-center rounded-md border border-[#3a3f48] text-[#8d929d] hover:border-red-500 hover:text-red-400"
                         >
                           ×
                         </button>

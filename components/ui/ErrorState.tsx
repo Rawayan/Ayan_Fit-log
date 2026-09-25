@@ -22,7 +22,7 @@ export default function ErrorState({
         onClick={() =>
           window.location.reload()
         }
-        className="mt-6 bg-[#c2f800] px-5 py-2.5 text-xs font-bold uppercase text-[#0c0d10]"
+        className="mt-6 rounded-md bg-[#c2f800] px-5 py-2.5 text-xs font-bold uppercase text-[#0c0d10]"
       >
         TRY AGAIN
       </button>
