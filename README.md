@@ -2,6 +2,9 @@
 
 FitLog is a modern workout library and planning web application built with Next.js and Tailwind CSS. Users can browse workouts, view detailed workout information, create a daily workout plan, save workouts, mark workouts as completed, and search/sort the workout library.
 
+
+## Live Link - https://ayan-fitlog.netlify.app/
+
 ## Key Features
 
 - Browse workout library from external API
