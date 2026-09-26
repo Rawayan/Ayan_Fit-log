@@ -32,8 +32,8 @@ export default function Navbar() {
   const savedCount = mounted ? saved.length : 0;
 
   return (
-    <header className="sticky top-0 z-50 h-[67px] border-b border-[#292d35] bg-[#0f1115]">
-      <div className="mx-auto flex h-full max-w-[1280px] items-center justify-between px-6">
+    <header className="sticky top-0 z-50 border-b border-[#292d35] bg-[#0f1115]">
+      <div className="mx-auto flex h-full max-w-[1280px] flex-wrap items-center justify-between gap-3 px-4 sm:px-6">
         {/* Logo */}
         <Link
           href="/"
@@ -47,16 +47,16 @@ export default function Navbar() {
             priority
           />
 
-          <span className="font-heading text-xl font-bold uppercase tracking-[-0.5px]">
+          <span className="font-heading text-lg font-bold uppercase tracking-[-0.5px] sm:text-xl">
             FITLOG
           </span>
         </Link>
 
         {/* Navigation */}
-        <nav className="absolute left-1/2 flex -translate-x-1/2 items-center">
+        <nav className="flex items-center gap-1 sm:gap-2">
           <Link
             href="/"
-            className={`px-4 py-2 text-sm transition ${
+            className={`px-3 py-2 text-sm transition sm:px-4 ${
               workoutActive
                 ? "text-white"
                 : "text-[#8d929d] hover:text-white"
@@ -67,7 +67,7 @@ export default function Navbar() {
 
           <Link
             href="/my-plan"
-            className={`px-4 py-2 text-sm transition ${
+            className={`px-3 py-2 text-sm transition sm:px-4 ${
               planActive
                 ? "text-white"
                 : "text-[#8d929d] hover:text-white"
@@ -78,10 +78,10 @@ export default function Navbar() {
         </nav>
 
         {/* Counters */}
-        <div className="flex items-center gap-7">
+        <div className="flex items-center gap-3 sm:gap-7">
           <Link
             href="/my-plan"
-            className={`flex items-center gap-2 text-sm transition ${
+            className={`flex items-center gap-1.5 text-sm transition sm:gap-2 ${
               planActive && !savedTabActive
                 ? "text-white"
                 : "text-[#c6cad2] hover:text-white"
@@ -96,7 +96,7 @@ export default function Navbar() {
 
           <Link
             href="/my-plan?tab=saved"
-            className={`flex items-center gap-2 text-sm transition ${
+            className={`flex items-center gap-1.5 text-sm transition sm:gap-2 ${
               savedTabActive
                 ? "text-white"
                 : "text-[#c6cad2] hover:text-white"

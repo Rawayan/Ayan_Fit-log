@@ -118,7 +118,7 @@ export default function MyPlanPageContent() {
         </p>
 
         {/* Metrics */}
-        <div className="mt-8 grid grid-cols-3 gap-0">
+        <div className="mt-8 grid grid-cols-3 gap-0 sm:grid-cols-3">
           <Metric
             label="Exercises"
             value={displayPlan.length}
@@ -136,8 +136,8 @@ export default function MyPlanPageContent() {
         </div>
 
         {/* Tabs */}
-        <div className="mt-8 flex items-center justify-between border-b border-[#292d35]">
-          <div className="flex">
+        <div className="mt-8 flex flex-col items-start border-b border-[#292d35] sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex w-full justify-between sm:justify-start">
             <button
               type="button"
               onClick={() => {
@@ -201,7 +201,7 @@ export default function MyPlanPageContent() {
                   return (
                     <article
                       key={workout.id}
-                      className={`flex min-h-[114px] items-center justify-between rounded-xl border bg-[#14171e] px-4 py-4 ${
+                      className={`flex min-h-[114px] flex-col items-center justify-between rounded-xl border bg-[#14171e] px-4 py-4 sm:flex-row ${
                         completed
                           ? "border-[#3e5412]"
                           : "border-[#292d35]"
@@ -251,7 +251,7 @@ export default function MyPlanPageContent() {
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-2">
+                      <div className="mt-4 flex items-center gap-2 self-end sm:mt-0">
                         <Link
                           href={`/workout/${workout.id}`}
                           className="flex h-10 items-center rounded-md border border-[#3a3f48] px-4 text-xs text-white hover:border-[#c2f800]"

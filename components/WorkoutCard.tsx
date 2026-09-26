@@ -77,7 +77,7 @@ export default function WorkoutCard({
       className="group block overflow-hidden rounded-xl border border-[#292d35] bg-[#15171d] transition hover:border-[#c2f800]"
     >
       {/* Image */}
-      <div className="relative h-[192px] overflow-hidden bg-[#1f232b]">
+      <div className="relative h-[160px] overflow-hidden bg-[#1f232b] sm:h-[192px">
         {workout.image ? (
           <Image
             src={workout.image}
@@ -94,7 +94,7 @@ export default function WorkoutCard({
       </div>
 
       {/* Content */}
-      <div className="h-[174px] px-6 py-6">
+      <div className="h-[150px] px-4 py-4 sm:h-[174px] sm:px-6 sm:py-6">
         <div className="flex flex-wrap gap-2">
           {categories.map((category) => (
             <span

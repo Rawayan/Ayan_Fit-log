@@ -7,8 +7,8 @@ export default function Home() {
   return (
     <main>
       {/* HERO */}
-      <section className="mx-auto max-w-[1280px] px-6 pt-6">
-        <div className="grid min-h-[460px] grid-cols-2 items-center gap-20 rounded-2xl bg-[#222630] px-[57px] py-12">
+      <section className="mx-auto max-w-[1280px] px-4 sm:px-6 pt-6">
+        <div className="grid min-h-[460px] grid-cols-1 items-center gap-8 rounded-2xl bg-[#222630] px-6 py-12 lg:grid-cols-2 lg:px-[57px]">
           {/* Left */}
           <div className="max-w-[558px]">
             <p className="mb-5 text-[11px] font-bold uppercase tracking-[0.1em] text-[#c2f800]">
@@ -36,14 +36,14 @@ export default function Home() {
           </div>
 
           {/* Banner */}
-          <div className="flex justify-end">
+          <div className="flex justify-center lg:justify-end">
             <Image
               src="/banner.png"
               alt="FitLog training"
               width={334}
               height={334}
               priority
-              className="h-[334px] w-[334px] object-cover "
+              className="h-[334px] w-[334px] object-cover"
             />
           </div>
         </div>
@@ -52,7 +52,7 @@ export default function Home() {
       {/* LIBRARY */}
       <section
         id="library"
-        className="mx-auto max-w-[1280px] px-6 pb-24 pt-8"
+        className="mx-auto max-w-[1280px] px-4 sm:px-6 pb-24 pt-8"
       >
         <div className="mb-10">
           <h2 className="font-heading text-3xl font-bold uppercase tracking-[-0.75px]">
